@@ -54,6 +54,20 @@
     <ul class="acct" id="list"></ul>
   </div>
 
+  <div class="card wide hidden" id="annPanel">
+    <h1>Company announcements</h1>
+    <p class="sub">Clients see these after they log in.</p>
+    <form id="annForm" novalidate>
+      <label for="at">Title</label>
+      <input id="at" maxlength="120" autocomplete="off">
+      <label for="ab">Message</label>
+      <textarea id="ab" rows="4" maxlength="2000"></textarea>
+      <p class="err" id="anerr" role="alert" aria-live="polite"></p>
+      <button class="btn" id="anadd" type="submit">Post announcement</button>
+    </form>
+    <ul class="acct" id="anlist"></ul>
+  </div>
+
 </main>
 <script>
 (function(){
@@ -74,6 +88,7 @@
   function show(which){
     loginCard.classList.toggle('hidden',which!=='login');
     panel.classList.toggle('hidden',which!=='panel');
+    $('annPanel').classList.toggle('hidden',which!=='panel');
     if(which==='login')$('lu').focus();
   }
   function signedOut(){users=[];show('login');}
@@ -131,7 +146,7 @@
     var lerr=$('lerr'),go=$('lgo'),name=$('lu').value.trim(),pass=$('lp').value;
     if(!name||!pass){lerr.textContent='Enter your username and password.';return;}
     lerr.textContent='';go.disabled=true;go.textContent='Signing in…';
-    try{await api('/api/admin/login','POST',{username:name,password:pass});$('lp').value='';show('panel');await load();$('au').focus();}
+    try{await api('/api/admin/login','POST',{username:name,password:pass});$('lp').value='';show('panel');await load();loadAnn();$('au').focus();}
     catch(x){lerr.textContent=x.message;}
     go.disabled=false;go.textContent='Log in';
   });
@@ -152,8 +167,34 @@
     btn.disabled=false;
   });
 
+
+  // announcements
+  var anerr=$('anerr');
+  function amsg(t,g){anerr.className=g?'err good':'err';anerr.textContent=t||'';}
+  async function loadAnn(){
+    try{
+      var rows=await api('/api/admin/announcements'),ul=$('anlist');ul.textContent='';
+      if(!rows.length){var e=document.createElement('li');e.className='empty';e.textContent='No announcements yet.';ul.appendChild(e);return;}
+      rows.forEach(function(a){
+        var li=document.createElement('li'),n=document.createElement('span');n.className='nm';n.textContent=a.title;
+        var del=mini('Delete');
+        del.onclick=async function(){try{await api('/api/admin/announcements/'+a.id,'DELETE');await loadAnn();}catch(x){if(x.status===401)return signedOut();amsg(x.message);}};
+        li.appendChild(n);li.appendChild(del);ul.appendChild(li);
+      });
+    }catch(e){if(e.status===401)return signedOut();amsg('Could not load announcements.');}
+  }
+  $('annForm').addEventListener('submit',async function(e){
+    e.preventDefault();
+    var t=$('at').value.trim(),b=$('ab').value.trim();
+    if(!t||!b){amsg('Enter a title and a message.');return;}
+    $('anadd').disabled=true;amsg('');
+    try{await api('/api/admin/announcements','POST',{title:t,body:b});$('at').value='';$('ab').value='';amsg('Posted.',true);await loadAnn();}
+    catch(x){if(x.status===401)signedOut();else amsg(x.message);}
+    $('anadd').disabled=false;
+  });
+
   // start: already signed in?
-  api('/api/admin/me').then(function(){show('panel');load();}).catch(function(){show('login');});
+  api('/api/admin/me').then(function(){show('panel');load();loadAnn();}).catch(function(){show('login');});
 })();
 </script>
 </body>

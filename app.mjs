@@ -10,7 +10,7 @@ const MAX_FAILS = 8;
 const WINDOW_MS = 15 * 60 * 1000;
 const USERNAME_RE = /^[a-z0-9._-]{3,32}$/;
 
-const ACCOUNT_HTML = "<!doctype html>\n<html lang=\"en\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, viewport-fit=cover\">\n<meta name=\"color-scheme\" content=\"light\">\n<meta name=\"robots\" content=\"noindex, nofollow\">\n<title>My account | PineBridge Investments</title>\n<link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n<link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n<link href=\"https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap\" rel=\"stylesheet\">\n<link rel=\"stylesheet\" href=\"/styles.css\">\n<link rel=\"stylesheet\" href=\"/app.css\">\n</head>\n<body>\n<header>\n  <div class=\"wrap nav\">\n    <a class=\"brand\" href=\"/\" aria-label=\"PineBridge Investments home\"><img alt=\"PineBridge Investments\" width=\"560\" height=\"120\" src=\"/img/logo.png\"></a>\n    <nav aria-label=\"Main\"><a href=\"/\">Home</a><button class=\"login-btn\" id=\"logout\" type=\"button\">Log out</button></nav>\n  </div>\n</header>\n<main class=\"authwrap\">\n  <div class=\"card wide\">\n    <h1 id=\"hello\">My account</h1>\n    <p class=\"sub\">You are signed in.</p>\n    <!-- Add your client content here. -->\n  </div>\n</main>\n<script>\n(function(){\n  fetch('/api/me',{credentials:'same-origin'}).then(function(r){\n    if(!r.ok){location.href='/login';return null;}\n    return r.json();\n  }).then(function(d){\n    if(d&&d.username)document.getElementById('hello').textContent='Welcome, '+d.username;\n  }).catch(function(){});\n  document.getElementById('logout').addEventListener('click',async function(){\n    try{await fetch('/api/logout',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin'});}catch(e){}\n    location.href='/login';\n  });\n})();\n</script>\n</body>\n</html>\n";
+const ACCOUNT_HTML = "<!doctype html>\n<html lang=\"en\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, viewport-fit=cover\">\n<meta name=\"color-scheme\" content=\"light\">\n<meta name=\"robots\" content=\"noindex, nofollow\">\n<title>My account | PineBridge Investments</title>\n<link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n<link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n<link href=\"https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap\" rel=\"stylesheet\">\n<link rel=\"stylesheet\" href=\"/styles.css\">\n<link rel=\"stylesheet\" href=\"/app.css\">\n</head>\n<body>\n<header>\n  <div class=\"wrap nav\">\n    <a class=\"brand\" href=\"/\" aria-label=\"PineBridge Investments home\"><img alt=\"PineBridge Investments\" width=\"560\" height=\"120\" src=\"/img/logo.png\"></a>\n    <nav aria-label=\"Main\"><a href=\"/\">Home</a><button class=\"login-btn\" id=\"logout\" type=\"button\">Log out</button></nav>\n  </div>\n</header>\n<main class=\"authwrap\">\n  <div class=\"card wide\">\n    <h1 id=\"hello\">My account</h1>\n    <p class=\"sub\">You are signed in.</p>\n    <h2 class=\"ah\">Company announcements</h2>\n    <ul class=\"ann\" id=\"ann\"><li class=\"empty\">Loading…</li></ul>\n  </div>\n</main>\n<script>\n(function(){\n  fetch('/api/me',{credentials:'same-origin'}).then(function(r){\n    if(!r.ok){location.href='/login';return null;}\n    return r.json();\n  }).then(function(d){\n    if(d&&d.username)document.getElementById('hello').textContent='Welcome, '+d.username;\n  }).catch(function(){});\n  fetch('/api/announcements',{credentials:'same-origin'}).then(function(r){return r.ok?r.json():[];}).then(function(rows){\n    var ul=document.getElementById('ann');ul.textContent='';\n    if(!rows.length){var e=document.createElement('li');e.className='empty';e.textContent='No announcements yet.';ul.appendChild(e);return;}\n    rows.forEach(function(a){\n      var li=document.createElement('li');\n      var t=document.createElement('strong');t.textContent=a.title;\n      var d=document.createElement('small');d.textContent=new Date(a.created).toLocaleDateString();\n      var b=document.createElement('p');b.textContent=a.body;\n      li.appendChild(t);li.appendChild(d);li.appendChild(b);ul.appendChild(li);\n    });\n  }).catch(function(){});\n  document.getElementById('logout').addEventListener('click',async function(){\n    try{await fetch('/api/logout',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin'});}catch(e){}\n    location.href='/login';\n  });\n})();\n</script>\n</body>\n</html>\n";
 
 // ---------- settings ----------
 function settings() {
@@ -220,6 +220,13 @@ async function route(req, context) {
     return u ? json(200, { username: u.username }) : json(401, { error: 'Not signed in.' });
   }
 
+  if (method === 'GET' && pathname === '/api/announcements') {
+    const u = await currentUser(req);
+    if (!u) return json(401, { error: 'Not signed in.' });
+    const rows = await sb('GET', 'announcements?select=id,title,body,created&order=created.desc&limit=50');
+    return json(200, rows || []);
+  }
+
   // ----- admin -----
   if (method === 'POST' && pathname === '/api/admin/login') {
     const key = ipKey('a', ip);
@@ -239,6 +246,26 @@ async function route(req, context) {
     if (!isAdmin(req)) return json(401, { error: 'Admin sign-in required.' });
 
     if (method === 'GET' && pathname === '/api/admin/me') return json(200, { ok: true });
+
+    if (pathname === '/api/admin/announcements') {
+      if (method === 'GET') {
+        const rows = await sb('GET', 'announcements?select=id,title,body,created&order=created.desc&limit=100');
+        return json(200, rows || []);
+      }
+      if (method === 'POST') {
+        const title = String(body.title || '').trim().slice(0, 120);
+        const text = String(body.body || '').trim().slice(0, 2000);
+        if (!title || !text) return json(400, { error: 'Enter a title and a message.' });
+        const rows = await sb('POST', 'announcements', { title, body: text }, 'return=representation');
+        return json(201, rows[0]);
+      }
+    }
+    const ann = pathname.match(/^\/api\/admin\/announcements\/(\d{1,12})$/);
+    if (ann && method === 'DELETE') {
+      const rows = await sb('DELETE', 'announcements?id=eq.' + ann[1], undefined, 'return=representation');
+      if (!rows || !rows.length) return json(404, { error: 'Announcement not found.' });
+      return json(200, { ok: true });
+    }
 
     if (method === 'GET' && pathname === '/api/admin/users') {
       const rows = await sb('GET', 'clients?select=username,created,disabled&order=username.asc');
