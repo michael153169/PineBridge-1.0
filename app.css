@@ -38,4 +38,8 @@ textarea{width:100%;font:inherit;padding:10px 12px;border:1.5px solid var(--line
 .ann li.empty{color:var(--muted)}
 .ann small{color:var(--muted);margin-left:10px}
 .ann p{margin:6px 0 0;white-space:pre-wrap}
-#annPanel{margin-top:24px}
+
+
+/* Admin page: two panels side by side, same width, tops aligned; stack on small screens */
+.authwrap{flex-wrap:wrap;gap:24px;align-items:flex-start}
+#panel,#annPanel{width:min(540px,100%);margin:0}
