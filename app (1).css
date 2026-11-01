@@ -1,0 +1,45 @@
+/* Extra styles for the login, admin and account pages (the site's base styles are in styles.css). */
+a.login-btn{display:inline-block;text-decoration:none;line-height:1.4}
+.authwrap{min-height:calc(100vh - 65px);display:flex;align-items:flex-start;justify-content:center;padding:56px 16px;background:var(--surface)}
+.card{width:min(440px,100%);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:32px}
+.card.wide{width:min(680px,100%)}
+.card h1{font-size:28px;margin:0 0 6px}
+.card .sub{color:var(--muted);margin:0 0 24px;font-size:15px}
+.card .btn{width:100%}
+.card .btn:disabled{opacity:.6;cursor:default}
+.card label{color:var(--ink)}
+.pw{position:relative}
+.pw .tog{position:absolute;right:6px;top:0;height:46px;background:none;border:0;color:var(--river);font:600 13px "Plus Jakarta Sans",system-ui,sans-serif;cursor:pointer;padding:0 10px}
+.pw input{padding-right:70px}
+.err{color:#B3261E;font-size:14px;min-height:20px;margin:0 0 12px}
+.err.good{color:var(--river)}
+.pwrow{display:flex;gap:8px;align-items:flex-start}
+.pwrow input{margin-bottom:18px;flex:1}
+.pwrow .mini{margin-top:7px}
+.mini{font:600 13px "Plus Jakarta Sans",system-ui,sans-serif;color:var(--river);background:transparent;border:1.5px solid var(--river);border-radius:4px;padding:6px 12px;cursor:pointer;white-space:nowrap}
+.mini:hover{background:var(--river);color:#fff}
+.mini.danger{color:#B3261E;border-color:#B3261E}
+.mini.danger:hover{background:#B3261E;color:#fff}
+.mini:disabled{opacity:.6;cursor:default}
+.ah{font-size:18px;margin:32px 0 8px}
+.acct{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.acct li{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.acct li.empty{color:var(--muted);font-size:15px}
+.acct .nm{font-weight:600;word-break:break-all}
+.acct .nm small{font-weight:500;color:var(--muted);margin-left:8px}
+.acct .act{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.acct .act input{margin:0;width:170px;padding:7px 10px;font-size:14px}
+.cardhead{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:8px}
+.hidden{display:none!important}
+
+textarea{width:100%;font:inherit;padding:10px 12px;border:1.5px solid var(--line);border-radius:4px;margin-bottom:18px;resize:vertical}
+.ann{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.ann li{padding:14px 0;border-bottom:1px solid var(--line)}
+.ann li.empty{color:var(--muted)}
+.ann small{color:var(--muted);margin-left:10px}
+.ann p{margin:6px 0 0;white-space:pre-wrap}
+
+
+/* Admin page: two panels side by side, same width, tops aligned; stack on small screens */
+.authwrap{flex-wrap:wrap;gap:24px;align-items:flex-start}
+#panel,#annPanel{width:min(540px,100%);margin:0}
