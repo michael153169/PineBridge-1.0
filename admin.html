@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<meta name="robots" content="noindex, nofollow">
+<title>Admin | PineBridge Investments</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+<link rel="stylesheet" href="/app.css">
+</head>
+<body>
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="/" aria-label="PineBridge Investments home"><img alt="PineBridge Investments" width="560" height="120" src="/img/logo.png"></a>
+    <nav aria-label="Main"><a href="/">Back to site</a></nav>
+  </div>
+</header>
+<main class="authwrap">
+
+  <div class="card hidden" id="loginCard">
+    <h1>Admin login</h1>
+    <p class="sub">For site administrators only.</p>
+    <form id="loginForm" novalidate>
+      <label for="lu">Username</label>
+      <input id="lu" type="text" autocomplete="username" autocapitalize="none" spellcheck="false" required>
+      <label for="lp">Password</label>
+      <div class="pw"><input id="lp" type="password" autocomplete="current-password" required><button class="tog" id="ltog" type="button" aria-pressed="false">Show</button></div>
+      <p class="err" id="lerr" role="alert" aria-live="polite"></p>
+      <button class="btn" id="lgo" type="submit">Log in</button>
+    </form>
+  </div>
+
+  <div class="card wide hidden" id="panel">
+    <div class="cardhead">
+      <div>
+        <h1>Accounts</h1>
+        <p class="sub">Add the usernames and passwords that can log in on the Client login page.</p>
+      </div>
+      <button class="mini" id="logout" type="button">Log out</button>
+    </div>
+    <form id="addForm" novalidate>
+      <label for="au">Username</label>
+      <input id="au" autocomplete="off" autocapitalize="none" spellcheck="false">
+      <label for="ap">Password (at least 8 characters)</label>
+      <div class="pwrow"><input id="ap" type="text" autocomplete="new-password" autocapitalize="none" spellcheck="false"><button class="mini" id="gen" type="button">Generate</button></div>
+      <p class="err" id="aerr" role="alert" aria-live="polite"></p>
+      <button class="btn" id="add" type="submit">Add account</button>
+    </form>
+    <h2 class="ah">Existing accounts</h2>
+    <ul class="acct" id="list"></ul>
+  </div>
+
+</main>
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id);};
+  var loginCard=$('loginCard'),panel=$('panel'),list=$('list'),aerr=$('aerr');
+  var users=[],editing=null,delArm=null;
+
+  async function api(path,method,body){
+    var r=await fetch(path,{method:method||'GET',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:body?JSON.stringify(body):undefined});
+    var d=null;try{d=await r.json();}catch(x){}
+    if(!r.ok){var e=new Error((d&&d.error)||'Something went wrong.');e.status=r.status;throw e;}
+    return d;
+  }
+  function msg(text,good){aerr.className=good?'err good':'err';aerr.textContent=text||'';}
+  function mini(t){var b=document.createElement('button');b.type='button';b.className='mini';b.textContent=t;return b;}
+  function randomPw(){var a='abcdefghijkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789',b=new Uint32Array(14),s='';crypto.getRandomValues(b);for(var i=0;i<14;i++)s+=a[b[i]%a.length];return s;}
+
+  function show(which){
+    loginCard.classList.toggle('hidden',which!=='login');
+    panel.classList.toggle('hidden',which!=='panel');
+    if(which==='login')$('lu').focus();
+  }
+  function signedOut(){users=[];show('login');}
+
+  function render(){
+    list.textContent='';
+    if(!users.length){var li0=document.createElement('li');li0.className='empty';li0.textContent='No accounts yet. Add the first one above.';list.appendChild(li0);return;}
+    users.forEach(function(u){
+      var li=document.createElement('li');
+      var n=document.createElement('span');n.className='nm';n.textContent=u.username;
+      if(u.disabled){var sm=document.createElement('small');sm.textContent='Disabled';n.appendChild(sm);}
+      li.appendChild(n);
+      var act=document.createElement('span');act.className='act';
+      if(editing===u.username){
+        var inp=document.createElement('input');inp.type='text';inp.placeholder='New password';inp.autocomplete='off';inp.setAttribute('aria-label','New password for '+u.username);
+        var save=mini('Save'),cancel=mini('Cancel');
+        save.onclick=async function(){
+          if(inp.value.length<8){msg('Password must be at least 8 characters.');inp.focus();return;}
+          save.disabled=true;
+          try{await api('/api/admin/users/'+encodeURIComponent(u.username),'PATCH',{password:inp.value});msg('Password updated for '+u.username+'.',true);editing=null;await load();}
+          catch(e){if(e.status===401)return signedOut();msg(e.message);render();}
+        };
+        cancel.onclick=function(){editing=null;render();};
+        act.appendChild(inp);act.appendChild(save);act.appendChild(cancel);
+        setTimeout(function(){inp.focus();},0);
+      }else{
+        var rs=mini('Reset password'),tg=mini(u.disabled?'Enable':'Disable'),del=mini(delArm===u.username?'Confirm delete':'Delete');
+        if(delArm===u.username)del.classList.add('danger');
+        rs.onclick=function(){editing=u.username;delArm=null;msg('');render();};
+        tg.onclick=async function(){
+          try{await api('/api/admin/users/'+encodeURIComponent(u.username),'PATCH',{disabled:!u.disabled});msg('');await load();}
+          catch(e){if(e.status===401)return signedOut();msg(e.message);}
+        };
+        del.onclick=async function(){
+          if(delArm!==u.username){delArm=u.username;render();setTimeout(function(){if(delArm===u.username){delArm=null;render();}},4000);return;}
+          try{await api('/api/admin/users/'+encodeURIComponent(u.username),'DELETE');msg('');delArm=null;await load();}
+          catch(e){delArm=null;if(e.status===401)return signedOut();msg(e.message);render();}
+        };
+        act.appendChild(rs);act.appendChild(tg);act.appendChild(del);
+      }
+      li.appendChild(act);list.appendChild(li);
+    });
+  }
+  async function load(){
+    try{users=await api('/api/admin/users');render();}
+    catch(e){if(e.status===401)return signedOut();msg('Could not load accounts.');}
+  }
+
+  // login
+  $('ltog').addEventListener('click',function(){
+    var p=$('lp'),t=$('ltog'),sh=p.type==='password';p.type=sh?'text':'password';t.textContent=sh?'Hide':'Show';t.setAttribute('aria-pressed',sh?'true':'false');
+  });
+  $('loginForm').addEventListener('submit',async function(e){
+    e.preventDefault();
+    var lerr=$('lerr'),go=$('lgo'),name=$('lu').value.trim(),pass=$('lp').value;
+    if(!name||!pass){lerr.textContent='Enter your username and password.';return;}
+    lerr.textContent='';go.disabled=true;go.textContent='Signing in…';
+    try{await api('/api/admin/login','POST',{username:name,password:pass});$('lp').value='';show('panel');await load();$('au').focus();}
+    catch(x){lerr.textContent=x.message;}
+    go.disabled=false;go.textContent='Log in';
+  });
+  $('logout').addEventListener('click',async function(){try{await api('/api/admin/logout','POST');}catch(e){}signedOut();});
+
+  // add account
+  $('gen').addEventListener('click',function(){$('ap').value=randomPw();$('ap').focus();});
+  $('addForm').addEventListener('submit',async function(e){
+    e.preventDefault();
+    var u=$('au').value.trim().toLowerCase(),p=$('ap').value,btn=$('add');
+    if(!/^[a-z0-9._-]{3,32}$/.test(u)){msg('Username must be 3–32 characters: letters, numbers, dot, dash or underscore.');$('au').focus();return;}
+    if(p.length<8){msg('Password must be at least 8 characters.');$('ap').focus();return;}
+    btn.disabled=true;msg('');
+    try{
+      await api('/api/admin/users','POST',{username:u,password:p});
+      $('au').value='';$('ap').value='';msg('Added '+u+'. Give them the password you just set.',true);await load();
+    }catch(x){if(x.status===401)signedOut();else msg(x.message);}
+    btn.disabled=false;
+  });
+
+  // start: already signed in?
+  api('/api/admin/me').then(function(){show('panel');load();}).catch(function(){show('login');});
+})();
+</script>
+</body>
+</html>

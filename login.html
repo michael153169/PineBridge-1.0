@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<meta name="robots" content="noindex, nofollow">
+<title>Client login | PineBridge Investments</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+<link rel="stylesheet" href="/app.css">
+</head>
+<body>
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="/" aria-label="PineBridge Investments home"><img alt="PineBridge Investments" width="560" height="120" src="/img/logo.png"></a>
+    <nav aria-label="Main"><a href="/">Back to site</a></nav>
+  </div>
+</header>
+<main class="authwrap">
+  <div class="card">
+    <h1>Client login</h1>
+    <p class="sub">Sign in to view your account.</p>
+    <form id="form" novalidate>
+      <label for="u">Username</label>
+      <input id="u" type="text" autocomplete="username" autocapitalize="none" spellcheck="false" required>
+      <label for="p">Password</label>
+      <div class="pw"><input id="p" type="password" autocomplete="current-password" required><button class="tog" id="tog" type="button" aria-pressed="false">Show</button></div>
+      <p class="err" id="err" role="alert" aria-live="polite"></p>
+      <button class="btn" id="go" type="submit">Log in</button>
+    </form>
+  </div>
+</main>
+<script>
+(function(){
+  var f=document.getElementById('form'),u=document.getElementById('u'),p=document.getElementById('p'),err=document.getElementById('err'),go=document.getElementById('go'),tog=document.getElementById('tog');
+  tog.addEventListener('click',function(){
+    var show=p.type==='password';p.type=show?'text':'password';
+    tog.textContent=show?'Hide':'Show';tog.setAttribute('aria-pressed',show?'true':'false');
+  });
+  f.addEventListener('submit',async function(e){
+    e.preventDefault();
+    var name=u.value.trim(),pass=p.value;
+    if(!name){err.textContent='Enter your username.';u.focus();return;}
+    if(!pass){err.textContent='Enter your password.';p.focus();return;}
+    err.textContent='';go.disabled=true;go.textContent='Signing in…';
+    try{
+      var r=await fetch('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:JSON.stringify({username:name,password:pass})});
+      var d={};try{d=await r.json();}catch(x){}
+      if(r.ok){location.href='/account';return;}
+      err.textContent=d.error||'Could not sign in. Try again.';
+    }catch(x){err.textContent='Could not reach the server. Check your connection and try again.';}
+    go.disabled=false;go.textContent='Log in';
+  });
+})();
+</script>
+</body>
+</html>

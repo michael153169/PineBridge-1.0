@@ -1,0 +1,7 @@
+{
+  "name": "pinebridge-netlify",
+  "version": "1.0.0",
+  "private": true,
+  "description": "PineBridge Investments website: client login and admin back office on Netlify + Supabase",
+  "engines": { "node": ">=18" }
+}

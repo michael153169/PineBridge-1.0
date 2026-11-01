@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<title>PineBridge Investments</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+<link rel="stylesheet" href="/app.css">
+</head>
+<body>
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="#top" aria-label="PineBridge Investments home"><img alt="PineBridge Investments" width="560" height="120" src="/img/logo.png"></a>
+    <nav aria-label="Main">
+      <a href="#about">About</a><a href="#services">Services</a><a href="#approach">Approach</a><a href="#contact">Contact</a><a class="login-btn" href="/login">Login</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <div class="hero">
+    <div class="wrap">
+      <h1 class="reveal">Building the link between people and opportunity in Malaysia.</h1>
+      <p class="reveal">Pine Bridge M’sia helps businesses set up, grow and partner locally, with clear advice and hands-on follow-through.</p>
+      <a class="btn reveal" href="#contact">Talk to our team</a>
+    </div>
+  </div>
+
+  <section id="about">
+    <div class="wrap about">
+      <div>
+        <h2>A local partner you can rely on.</h2>
+        <p class="lead">We work with companies entering or expanding in Malaysia, and with Malaysian businesses looking for dependable partners abroad. We keep the process simple: listen first, give honest advice, then help you carry it out.</p>
+        <p class="lead">Our team understands local regulations, supplier networks and business culture, so you spend less time guessing and more time building.</p>
+      </div>
+      <div class="facts">
+        <div><strong>Local knowledge</strong><span>Regulations, licensing and market practice.</span></div>
+        <div><strong>Plain advice</strong><span>Clear recommendations, with costs and risks stated up front.</span></div>
+        <div><strong>Follow-through</strong><span>We stay involved until the work is done.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="services" class="services">
+    <div class="wrap">
+      <h2>What we do</h2>
+      <p class="lead">Four services that cover the path from first idea to a running operation.</p>
+      <div class="svc">
+        <article><h3>Business advisory</h3><p>Strategy, feasibility and planning support for new and existing ventures.</p></article>
+        <article><h3>Market entry</h3><p>Company setup, licensing and local compliance guidance, handled step by step.</p></article>
+        <article><h3>Partner sourcing</h3><p>Introductions to vetted suppliers, distributors and collaborators.</p></article>
+        <article><h3>Project coordination</h3><p>On-the-ground management so timelines, vendors and budgets stay on track.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section id="approach">
+    <div class="wrap">
+      <h2>How we work together</h2>
+      <ol class="steps">
+        <li><h3>Listen</h3><p>We learn your goals, timeline and constraints.</p></li>
+        <li><h3>Plan</h3><p>You get a written plan with scope, cost and risks.</p></li>
+        <li><h3>Deliver</h3><p>We carry out the work and report progress regularly.</p></li>
+        <li><h3>Support</h3><p>We stay available as your operation grows.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="contact" class="contact">
+    <div class="wrap grid">
+      <div>
+        <h2>Let’s talk about your project.</h2>
+        <p class="lead">Tell us a little about what you need. We reply within two business days.</p>
+        <p class="lead">hello@pinebridgemsia.com</p>
+      </div>
+      <div>
+        <label for="n">Name</label><input id="n" autocomplete="name">
+        <label for="e">Email</label><input id="e" type="email" autocomplete="email">
+        <label for="m">How can we help?</label><textarea id="m"></textarea>
+        <button class="btn" type="button" id="send">Send message</button>
+      </div>
+    </div>
+  </section>
+</main>
+<footer><div class="wrap"><span>© 2026 Pine Bridge M’sia</span><span>Malaysia</span></div></footer>
+<script>
+document.getElementById('send').addEventListener('click',function(){
+  var n=document.getElementById('n').value.trim(),e=document.getElementById('e').value.trim(),m=document.getElementById('m').value.trim();
+  if(!n||!e||!m){alert('Please fill in your name, email and message.');return;}
+  var body=encodeURIComponent(m+'\n\n'+n+' ('+e+')');
+  location.href='mailto:hello@pinebridgemsia.com?subject='+encodeURIComponent('Website enquiry from '+n)+'&body='+body;
+});
+</script>
+</body>
+</html>
