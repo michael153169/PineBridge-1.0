@@ -57,6 +57,13 @@
   <div class="card wide hidden" id="annPanel">
     <h1>Company announcements</h1>
     <p class="sub">Clients see these after they log in.</p>
+    <form id="noteForm" novalidate>
+      <label for="nt">Top-right box (shown to all clients, next to "Welcome")</label>
+      <textarea id="nt" rows="3" maxlength="500"></textarea>
+      <p class="err" id="nterr" role="alert" aria-live="polite"></p>
+      <button class="btn" id="ntsave" type="submit">Save top-right box</button>
+    </form>
+    <h2 class="ah">Announcements</h2>
     <form id="annForm" novalidate>
       <label for="at">Title</label>
       <input id="at" maxlength="120" autocomplete="off">
@@ -146,7 +153,7 @@
     var lerr=$('lerr'),go=$('lgo'),name=$('lu').value.trim(),pass=$('lp').value;
     if(!name||!pass){lerr.textContent='Enter your username and password.';return;}
     lerr.textContent='';go.disabled=true;go.textContent='Signing in…';
-    try{await api('/api/admin/login','POST',{username:name,password:pass});$('lp').value='';show('panel');await load();loadAnn();$('au').focus();}
+    try{await api('/api/admin/login','POST',{username:name,password:pass});$('lp').value='';show('panel');await load();loadAnn();loadNote();$('au').focus();}
     catch(x){lerr.textContent=x.message;}
     go.disabled=false;go.textContent='Log in';
   });
@@ -193,8 +200,19 @@
     $('anadd').disabled=false;
   });
 
+
+  // top-right notice
+  function nmsg(t,g){var n=$('nterr');n.className=g?'err good':'err';n.textContent=t||'';}
+  async function loadNote(){try{var d=await api('/api/admin/notice');$('nt').value=d.text||'';}catch(e){if(e.status===401)signedOut();}}
+  $('noteForm').addEventListener('submit',async function(e){
+    e.preventDefault();$('ntsave').disabled=true;nmsg('');
+    try{await api('/api/admin/notice','PUT',{text:$('nt').value});nmsg('Saved.',true);}
+    catch(x){if(x.status===401)signedOut();else nmsg(x.message);}
+    $('ntsave').disabled=false;
+  });
+
   // start: already signed in?
-  api('/api/admin/me').then(function(){show('panel');load();loadAnn();}).catch(function(){show('login');});
+  api('/api/admin/me').then(function(){show('panel');load();loadAnn();loadNote();}).catch(function(){show('login');});
 })();
 </script>
 </body>
