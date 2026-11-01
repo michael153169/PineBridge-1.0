@@ -10,7 +10,7 @@ const MAX_FAILS = 8;
 const WINDOW_MS = 15 * 60 * 1000;
 const USERNAME_RE = /^[a-z0-9._-]{3,32}$/;
 
-const ACCOUNT_HTML = "<!doctype html>\n<html lang=\"en\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, viewport-fit=cover\">\n<meta name=\"color-scheme\" content=\"light\">\n<meta name=\"robots\" content=\"noindex, nofollow\">\n<title>My account | PineBridge Investments</title>\n<link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n<link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n<link href=\"https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap\" rel=\"stylesheet\">\n<link rel=\"stylesheet\" href=\"/styles.css\">\n<link rel=\"stylesheet\" href=\"/app.css\">\n</head>\n<body>\n<header>\n  <div class=\"wrap nav\">\n    <a class=\"brand\" href=\"/\" aria-label=\"PineBridge Investments home\"><img alt=\"PineBridge Investments\" width=\"560\" height=\"120\" src=\"/img/logo.png\"></a>\n    <nav aria-label=\"Main\"><a href=\"/\">Home</a><button class=\"login-btn\" id=\"logout\" type=\"button\">Log out</button></nav>\n  </div>\n</header>\n<main class=\"authwrap\">\n  <div class=\"card wide\">\n    <h1 id=\"hello\">My account</h1>\n    <p class=\"sub\">You are signed in.</p>\n    <h2 class=\"ah\">Company announcements</h2>\n    <ul class=\"ann\" id=\"ann\"><li class=\"empty\">Loading…</li></ul>\n  </div>\n</main>\n<script>\n(function(){\n  fetch('/api/me',{credentials:'same-origin'}).then(function(r){\n    if(!r.ok){location.href='/login';return null;}\n    return r.json();\n  }).then(function(d){\n    if(d&&d.username)document.getElementById('hello').textContent='Welcome, '+d.username;\n  }).catch(function(){});\n  fetch('/api/announcements',{credentials:'same-origin'}).then(function(r){return r.ok?r.json():[];}).then(function(rows){\n    var ul=document.getElementById('ann');ul.textContent='';\n    if(!rows.length){var e=document.createElement('li');e.className='empty';e.textContent='No announcements yet.';ul.appendChild(e);return;}\n    rows.forEach(function(a){\n      var li=document.createElement('li');\n      var t=document.createElement('strong');t.textContent=a.title;\n      var d=document.createElement('small');d.textContent=new Date(a.created).toLocaleDateString();\n      var b=document.createElement('p');b.textContent=a.body;\n      li.appendChild(t);li.appendChild(d);li.appendChild(b);ul.appendChild(li);\n    });\n  }).catch(function(){});\n  document.getElementById('logout').addEventListener('click',async function(){\n    try{await fetch('/api/logout',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin'});}catch(e){}\n    location.href='/login';\n  });\n})();\n</script>\n</body>\n</html>\n";
+const ACCOUNT_HTML = "<!doctype html>\n<html lang=\"en\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, viewport-fit=cover\">\n<meta name=\"color-scheme\" content=\"light\">\n<meta name=\"robots\" content=\"noindex, nofollow\">\n<title>My account | PineBridge Investments</title>\n<link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n<link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n<link href=\"https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap\" rel=\"stylesheet\">\n<link rel=\"stylesheet\" href=\"/styles.css\">\n<link rel=\"stylesheet\" href=\"/app.css\">\n</head>\n<body>\n<header>\n  <div class=\"wrap nav\">\n    <a class=\"brand\" href=\"/\" aria-label=\"PineBridge Investments home\"><img alt=\"PineBridge Investments\" width=\"560\" height=\"120\" src=\"/img/logo.png\"></a>\n    <nav aria-label=\"Main\"><a href=\"/\">Home</a><button class=\"login-btn\" id=\"logout\" type=\"button\">Log out</button></nav>\n  </div>\n</header>\n<main class=\"authwrap\">\n  <div class=\"card wide\">\n    <div class=\"toprow\">\n      <div><h1 id=\"hello\">My account</h1>\n      <p class=\"sub\">You are signed in.</p></div>\n      <div class=\"notice\" id=\"notice\" hidden></div>\n    </div>\n    <h2 class=\"ah\">Company announcements</h2>\n    <ul class=\"ann\" id=\"ann\"><li class=\"empty\">Loading…</li></ul>\n  </div>\n</main>\n<script>\n(function(){\n  fetch('/api/me',{credentials:'same-origin'}).then(function(r){\n    if(!r.ok){location.href='/login';return null;}\n    return r.json();\n  }).then(function(d){\n    if(d&&d.username)document.getElementById('hello').textContent='Welcome, '+d.username;\n  }).catch(function(){});\n  fetch('/api/notice',{credentials:'same-origin'}).then(function(r){return r.ok?r.json():null;}).then(function(d){\n    var n=document.getElementById('notice');\n    if(d&&d.text){n.textContent=d.text;n.hidden=false;}\n  }).catch(function(){});\n  fetch('/api/announcements',{credentials:'same-origin'}).then(function(r){return r.ok?r.json():[];}).then(function(rows){\n    var ul=document.getElementById('ann');ul.textContent='';\n    if(!rows.length){var e=document.createElement('li');e.className='empty';e.textContent='No announcements yet.';ul.appendChild(e);return;}\n    rows.forEach(function(a){\n      var li=document.createElement('li');\n      var t=document.createElement('strong');t.textContent=a.title;\n      var d=document.createElement('small');d.textContent=new Date(a.created).toLocaleDateString();\n      var b=document.createElement('p');b.textContent=a.body;\n      li.appendChild(t);li.appendChild(d);li.appendChild(b);ul.appendChild(li);\n    });\n  }).catch(function(){});\n  document.getElementById('logout').addEventListener('click',async function(){\n    try{await fetch('/api/logout',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin'});}catch(e){}\n    location.href='/login';\n  });\n})();\n</script>\n</body>\n</html>\n";
 
 // ---------- settings ----------
 function settings() {
@@ -54,6 +54,12 @@ const q = encodeURIComponent;
 async function getUser(username) {
   const rows = await sb('GET', 'clients?username=eq.' + q(username) + '&select=username,salt,hash,disabled,created');
   return rows && rows[0] ? rows[0] : null;
+}
+
+const NOTICE_KEY = '__top_notice__';
+async function getNotice() {
+  const rows = await sb('GET', 'announcements?title=eq.' + q(NOTICE_KEY) + '&select=body&limit=1');
+  return rows && rows[0] ? rows[0].body : '';
 }
 
 // ---------- passwords (scrypt) ----------
@@ -224,7 +230,12 @@ async function route(req, context) {
     const u = await currentUser(req);
     if (!u) return json(401, { error: 'Not signed in.' });
     const rows = await sb('GET', 'announcements?select=id,title,body,created&order=created.desc&limit=50');
-    return json(200, rows || []);
+    return json(200, (rows || []).filter((r) => r.title !== NOTICE_KEY));
+  }
+  if (method === 'GET' && pathname === '/api/notice') {
+    const u = await currentUser(req);
+    if (!u) return json(401, { error: 'Not signed in.' });
+    return json(200, { text: await getNotice() });
   }
 
   // ----- admin -----
@@ -247,13 +258,23 @@ async function route(req, context) {
 
     if (method === 'GET' && pathname === '/api/admin/me') return json(200, { ok: true });
 
+    if (pathname === '/api/admin/notice') {
+      if (method === 'GET') return json(200, { text: await getNotice() });
+      if (method === 'PUT') {
+        const text = String(body.text || '').trim().slice(0, 500);
+        await sb('DELETE', 'announcements?title=eq.' + q(NOTICE_KEY), undefined, 'return=representation');
+        if (text) await sb('POST', 'announcements', { title: NOTICE_KEY, body: text });
+        return json(200, { text });
+      }
+    }
     if (pathname === '/api/admin/announcements') {
       if (method === 'GET') {
         const rows = await sb('GET', 'announcements?select=id,title,body,created&order=created.desc&limit=100');
-        return json(200, rows || []);
+        return json(200, (rows || []).filter((r) => r.title !== NOTICE_KEY));
       }
       if (method === 'POST') {
         const title = String(body.title || '').trim().slice(0, 120);
+        if (title === NOTICE_KEY) return json(400, { error: 'Choose a different title.' });
         const text = String(body.body || '').trim().slice(0, 2000);
         if (!title || !text) return json(400, { error: 'Enter a title and a message.' });
         const rows = await sb('POST', 'announcements', { title, body: text }, 'return=representation');

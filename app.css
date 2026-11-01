@@ -43,3 +43,7 @@ textarea{width:100%;font:inherit;padding:10px 12px;border:1.5px solid var(--line
 /* Admin page: two panels side by side, same width, tops aligned; stack on small screens */
 .authwrap{flex-wrap:wrap;gap:24px;align-items:flex-start}
 #panel,#annPanel{width:min(540px,100%);margin:0}
+
+.toprow{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-wrap:wrap}
+.notice{max-width:260px;padding:12px 14px;border:1px solid var(--line);border-radius:6px;background:var(--surface);font-size:14px;white-space:pre-wrap}
+.notice[hidden]{display:none}
