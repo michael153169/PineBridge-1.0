@@ -47,3 +47,32 @@ textarea{width:100%;font:inherit;padding:10px 12px;border:1.5px solid var(--line
 .toprow{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-wrap:wrap}
 .notice{max-width:260px;padding:12px 14px;border:1px solid var(--line);border-radius:6px;background:var(--surface);font-size:14px;white-space:pre-wrap}
 .notice[hidden]{display:none}
+
+/* Client portal */
+.portal{display:flex;gap:24px;max-width:1040px;margin:0 auto;padding:32px 16px 56px;align-items:flex-start}
+.side{width:210px;flex:none;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:16px;position:sticky;top:16px}
+.pwho{display:flex;align-items:center;gap:10px;padding-bottom:14px;margin-bottom:10px;border-bottom:1px solid var(--line)}
+.av{width:36px;height:36px;border-radius:50%;background:var(--river);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;flex:none}
+.wn{font-weight:600;word-break:break-all;font-size:14px}
+.menu{display:flex;flex-direction:column;gap:4px}
+.menu a{padding:10px 12px;border-radius:6px;color:var(--ink);text-decoration:none;font-weight:500}
+.menu a:hover{background:var(--surface)}
+.menu a.on{background:var(--river);color:#fff}
+.content{flex:1;min-width:0;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:32px}
+.content h1{font-size:28px;margin:0 0 6px}
+.login-btn{white-space:nowrap}
+.content .sub{color:var(--muted);margin:0 0 20px}
+.pg[hidden]{display:none}
+.more{color:var(--river);font-weight:600;text-decoration:none}
+.kv{display:grid;grid-template-columns:140px 1fr;gap:10px 16px;margin:0 0 16px}
+.kv dt{color:var(--muted)}
+.kv dd{margin:0;font-weight:600;word-break:break-all}
+.hint{color:var(--muted);font-size:14px}
+@media (max-width:760px){
+  .portal{flex-direction:column;padding-top:16px}
+  .side{width:100%;position:static}
+  .menu{flex-direction:row;flex-wrap:wrap}
+  .content{width:100%;padding:20px}
+}
+.content .pg{padding:0}
+.content h2{font-size:18px;max-width:none;margin-bottom:8px}
