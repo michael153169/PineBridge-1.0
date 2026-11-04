@@ -110,4 +110,12 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   section{padding:64px 0}
   .hero .wrap{padding-top:56px}
 }
-@media (max-width:480px){nav a:nth-child(n+3){display:none} ol.steps{grid-template-columns:1fr}}
+@media (max-width:480px){
+  .wrap{padding-left:14px;padding-right:14px}
+  .nav{height:auto;min-height:64px;gap:10px;flex-wrap:wrap;padding-top:10px;padding-bottom:10px}
+  .brand img{height:34px;max-width:100%}
+  nav{display:flex;align-items:center;justify-content:flex-end;gap:12px;flex-wrap:wrap;font-size:13px}
+  nav a:nth-child(n+3){display:inline-flex}
+  .login-btn{font-size:12px;padding:7px 10px}
+  ol.steps{grid-template-columns:1fr}
+}
