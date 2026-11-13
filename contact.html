@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<meta name="description" content="Contact PineBridge about virtual portfolio access and website support.">
+<title>Contact Us | PineBridge Investments</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+<link rel="stylesheet" href="/app.css">
+</head>
+<body>
+<header class="site-header"><div class="wrap nav site-nav">
+      <a class="brand" href="/" aria-label="PineBridge Investments home"><img src="/img/logo.png" width="560" height="120" alt="PineBridge Investments"></a>
+      <nav class="desktop-nav" aria-label="Main navigation"><a href="/index.html">Home</a><a href="/about.html">About Us</a><a href="/services.html">Services</a><a href="/markets.html">Market Insights</a><a href="/contact.html" aria-current="page" class="active">Contact</a><a class="login-btn" href="https://glittery-salamander-a1bb12.netlify.app/login">Login</a></nav>
+      <details class="mobile-menu"><summary aria-label="Open navigation">Menu <span aria-hidden="true">☰</span></summary><nav aria-label="Mobile navigation"><a href="/index.html">Home</a><a href="/about.html">About Us</a><a href="/services.html">Services</a><a href="/markets.html">Market Insights</a><a href="/contact.html" aria-current="page" class="active">Contact</a><a class="login-btn" href="https://glittery-salamander-a1bb12.netlify.app/login">Login</a></nav></details>
+    </div></header>
+<main id="main-content"><section class="page-head"><div class="wrap"><p class="eyebrow">CONTACT US</p><h1>We're here to help you navigate PineBridge.</h1><p class="page-lead">Questions about website access, the virtual dashboard or the learning experience? Get in touch.</p></div></section>
+<section><div class="wrap contact-layout"><div class="contact-info"><p class="eyebrow">GET IN TOUCH</p><h2>Start a conversation.</h2><p class="lead">For account-access questions and general platform enquiries, reach out to our support contact.</p><div class="contact-detail"><span>EMAIL</span><a href="mailto:customercare@pinebridgemsia.com">customercare@pinebridgemsia.com</a></div><p class="contact-note">PineBridge is a virtual stock-market education platform. Please do not send banking passwords, identity documents or other sensitive information through this form.</p></div><form class="contact-form" id="contactForm"><h3>Send an enquiry</h3><p>Complete the details below. Your email application will open with a prepared message.</p><label for="n">Full name</label><input id="n" name="name" autocomplete="name" required maxlength="100" placeholder="Your name"><label for="e">Email address</label><input id="e" name="email" type="email" autocomplete="email" required maxlength="180" placeholder="you@example.com"><label for="m">How can we help?</label><textarea id="m" name="message" required maxlength="3000" placeholder="Tell us what you need help with"></textarea><button class="btn" type="submit">Prepare email</button><p class="form-hint">This form opens your email application; it does not submit your message to a website server.</p></form></div></section>
+<script>document.addEventListener('DOMContentLoaded',function(){var f=document.getElementById('contactForm');f.addEventListener('submit',function(ev){ev.preventDefault();if(!f.reportValidity())return;var n=document.getElementById('n').value.trim(),e=document.getElementById('e').value.trim(),m=document.getElementById('m').value.trim();if(!n||!e||!m)return;var subject=encodeURIComponent('PineBridge website enquiry from '+n);var body=encodeURIComponent('Name: '+n+'\nEmail: '+e+'\n\nMessage:\n'+m);window.location.href='mailto:customercare@pinebridgemsia.com?subject='+subject+'&body='+body;});});</script></main>
+<footer class="site-footer"><div class="wrap footer-layout"><div><strong>PineBridge Investments</strong><p>Malaysian equities learning and virtual portfolio exploration.</p></div><div class="footer-links"><a href="/about.html">About</a><a href="/services.html">Services</a><a href="/markets.html">Market Insights</a><a href="/contact.html">Contact</a></div></div><div class="wrap legal-line"><span>Copyright © 2026 PineBridge Msia Sdn. Bhd.</span><span>Educational simulation only · No real investment funds accepted</span></div></footer>
+</body>
+</html>

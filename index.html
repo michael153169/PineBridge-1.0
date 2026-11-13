@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light">
-<title>PineBridge Investments</title>
+<meta name="description" content="Explore Malaysian equities, Bursa Malaysia concepts and virtual portfolio learning through PineBridge.">
+<title>Malaysian Equities &amp; Virtual Portfolio Learning | PineBridge Investments</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -12,88 +13,16 @@
 <link rel="stylesheet" href="/app.css">
 </head>
 <body>
-<header>
-  <div class="wrap nav">
-    <a class="brand" href="#top" aria-label="PineBridge Investments home"><img alt="PineBridge Investments" width="560" height="120" src="/img/logo.png"></a>
-    <nav aria-label="Main">
-      <a href="#about">About</a><a href="#services">Services</a><a href="#approach">Approach</a><a href="#contact">Contact</a><a class="login-btn" href="https://glittery-salamander-a1bb12.netlify.app/login">Login</a>
-    </nav>
-  </div>
-</header>
-
-<main id="top">
-  <div class="hero">
-    <div class="wrap">
-      <h1 class="reveal">A Clearer Way to Explore Malaysian Equities.</h1>
-      <p class="reveal">Discover a Malaysia-focused virtual investment experience built around stock-market understanding, portfolio visibility and a simpler way to explore investing concepts.</p>
-      <a class="btn reveal" href="https://glittery-salamander-a1bb12.netlify.app/login">Explore the Platform</a>
-    </div>
-  </div>
-
-  <section id="about">
-    <div class="wrap about">
-      <div>
-        <h2>Focused on the Malaysian Stock Market.</h2>
-        <p class="lead">PineBridge Investments brings a clear, accessible approach to understanding equities and investment portfolios, with a particular focus on Malaysia and the Bursa Malaysia market.</p>
-        <p class="lead">Our client experience is designed for virtual portfolio exploration and market learning. Account balances and performance figures are simulated, not real investments or withdrawable funds.</p>
-      </div>
-      <div class="facts">
-        <div><strong>Malaysia market focus</strong><span>Explore the fundamentals of Malaysian listed equities and market sectors.</span></div>
-        <div><strong>Clear information</strong><span>Understand portfolio figures, market movements and investment concepts.</span></div>
-        <div><strong>Simple experience</strong><span>A straightforward interface for exploring your virtual portfolio.</span></div>
-      </div>
-    </div>
-  </section>
-
-  <section id="services" class="services">
-    <div class="wrap">
-      <h2>Explore the World of Malaysian Equities</h2>
-      <p class="lead">Discover key parts of the stock-investing experience through a clear, learning-focused platform.</p>
-      <div class="svc">
-        <article><h3>Bursa Malaysia Focus</h3><p>Get familiar with Malaysia’s listed-company landscape, equity sectors and market terminology.</p></article>
-        <article><h3>Virtual Portfolio Overview</h3><p>Review simulated account balances and portfolio information in a simple dashboard.</p></article>
-        <article><h3>Market Chart Exploration</h3><p>Explore price-chart tools to better understand market trends, volatility and price movements.</p></article>
-        <article><h3>Investment Learning</h3><p>Build familiarity with risk, diversification and long-term investing principles.</p></article>
-      </div>
-    </div>
-  </section>
-
-  <section id="approach">
-    <div class="wrap">
-      <h2>Your Journey with PineBridge</h2>
-      <ol class="steps">
-        <li><h3>Discover</h3><p>Explore Malaysian equity-market concepts and the basics of investing.</p></li>
-        <li><h3>Explore</h3><p>Sign in to your virtual account and get familiar with the dashboard.</p></li>
-        <li><h3>Monitor</h3><p>Review simulated portfolio values and explore available chart tools.</p></li>
-        <li><h3>Learn</h3><p>Use the experience to build your understanding of market risk and investing.</p></li>
-      </ol>
-    </div>
-  </section>
-
-  <section id="contact" class="contact">
-    <div class="wrap grid">
-      <div>
-        <h2>Questions About PineBridge?</h2>
-        <p class="lead">Contact us with questions about the platform, client access or your virtual portfolio experience.</p>
-        <p class="lead">customercare@pinebridgemsia.com</p>
-      </div>
-      <div>
-        <label for="n">Name</label><input id="n" autocomplete="name">
-        <label for="e">Email</label><input id="e" type="email" autocomplete="email">
-        <label for="m">How can we help?</label><textarea id="m"></textarea>
-        <button class="btn" type="button" id="send">Send message</button>
-      </div>
-    </div>
-  </section>
-</main>
-<footer><div class="wrap"><span>Copyright © 2026 PineBridge Msia Sdn. Bhd.</span><span>Malaysia · Investment experience · Investment advice</span></div></footer>
-<script>
-document.getElementById('send').addEventListener('click',function(){
-  var n=document.getElementById('n').value.trim(),e=document.getElementById('e').value.trim(),m=document.getElementById('m').value.trim();
-  if(!n||!e||!m){alert('Please fill in your name, email and message.');return;}
-  var body=encodeURIComponent(m+'\n\n'+n+' ('+e+')');
-  location.href='mailto:hello@pinebridgemsia.com?subject='+encodeURIComponent('Website enquiry from '+n)+'&body='+body;
-});
-</script>
+<header class="site-header"><div class="wrap nav site-nav">
+      <a class="brand" href="/" aria-label="PineBridge Investments home"><img src="/img/logo.png" width="560" height="120" alt="PineBridge Investments"></a>
+      <nav class="desktop-nav" aria-label="Main navigation"><a href="/index.html" aria-current="page" class="active">Home</a><a href="/about.html">About Us</a><a href="/services.html">Services</a><a href="/markets.html">Market Insights</a><a href="/contact.html">Contact</a><a class="login-btn" href="https://glittery-salamander-a1bb12.netlify.app/login">Login</a></nav>
+      <details class="mobile-menu"><summary aria-label="Open navigation">Menu <span aria-hidden="true">☰</span></summary><nav aria-label="Mobile navigation"><a href="/index.html" aria-current="page" class="active">Home</a><a href="/about.html">About Us</a><a href="/services.html">Services</a><a href="/markets.html">Market Insights</a><a href="/contact.html">Contact</a><a class="login-btn" href="https://glittery-salamander-a1bb12.netlify.app/login">Login</a></nav></details>
+    </div></header>
+<main id="main-content"><div class="hero"><div class="wrap"><p class="eyebrow reveal">MALAYSIAN EQUITIES · VIRTUAL MARKET EXPERIENCE</p><h1 class="reveal">A Clearer Way to Explore Malaysian Equities.</h1><p class="reveal">Discover Malaysia's stock-market landscape through a focused learning experience, virtual portfolio tools and clear, accessible market concepts.</p><a class="btn reveal" href="https://glittery-salamander-a1bb12.netlify.app/login">Explore the Platform</a><p class="hero-note">Virtual funds only. No real securities are bought or sold.</p></div></div>
+<section class="home-intro"><div class="wrap intro-grid"><div><p class="eyebrow">THE PINEBRIDGE EXPERIENCE</p><h2>Built for a better understanding of the Malaysian market.</h2></div><div><p class="lead">Learn how listed companies, market sectors and portfolio values fit together. PineBridge brings a clear, practical interface to stock-market education and simulated portfolio exploration.</p><a class="text-link" href="/about.html">Discover PineBridge <span aria-hidden="true">→</span></a></div></div></section>
+<section class="home-services section-tint"><div class="wrap"><div class="section-heading"><div><p class="eyebrow">WHAT YOU CAN EXPLORE</p><h2>Understand markets. Explore possibilities.</h2></div><a class="text-link" href="/services.html">View our services <span aria-hidden="true">→</span></a></div><div class="feature-grid"><a class="feature-card" href="/services.html"><span class="feature-num">01 / MARKET KNOWLEDGE</span><h3>Malaysian Equities</h3><p>Explore how the Malaysian equity market is structured and learn the language of listed securities.</p><span class="card-arrow" aria-hidden="true">↗</span></a><a class="feature-card" href="/services.html"><span class="feature-num">02 / VIRTUAL EXPERIENCE</span><h3>Portfolio Simulation</h3><p>Review simulated balances and portfolio scenarios in a clear digital environment.</p><span class="card-arrow" aria-hidden="true">↗</span></a><a class="feature-card" href="/markets.html"><span class="feature-num">03 / MARKET INSIGHTS</span><h3>Bursa Malaysia Focus</h3><p>Discover key market segments, investing concepts and the importance of understanding risk.</p><span class="card-arrow" aria-hidden="true">↗</span></a></div></div></section>
+<section class="home-cta"><div class="wrap cta-panel"><div><p class="eyebrow">EXPLORE WITH CLARITY</p><h2>Your introduction to the world of Malaysian equities.</h2><p>Learn about the market and explore your virtual account in one place.</p></div><a class="btn" href="https://glittery-salamander-a1bb12.netlify.app/login">Client Login</a></div></section>
+<section class="disclosure-section"><div class="wrap"><p><strong>Important information:</strong> PineBridge is an educational stock-market simulation platform. Account balances, trades and performance figures are virtual and do not represent actual or guaranteed investment returns. PineBridge does not accept real investment funds through this platform.</p></div></section></main>
+<footer class="site-footer"><div class="wrap footer-layout"><div><strong>PineBridge Investments</strong><p>Malaysian equities learning and virtual portfolio exploration.</p></div><div class="footer-links"><a href="/about.html">About</a><a href="/services.html">Services</a><a href="/markets.html">Market Insights</a><a href="/contact.html">Contact</a></div></div><div class="wrap legal-line"><span>Copyright © 2026 PineBridge Msia Sdn. Bhd.</span><span>Educational simulation only · No real investment funds accepted</span></div></footer>
 </body>
 </html>
